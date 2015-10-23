@@ -55,3 +55,9 @@ safetail'''''''
 --mult''' = ((((\x -> \y) -> \z) -> x * y)* z)
 
 remove n xs = take n xs ++ drop n xs
+remove' n xs = drop n xs ++ take n xs
+remove'' n xs = take (n+1) xs ++ drop n xs
+remove''' n xs = take n xs ++ drop (n+1) xs
+
+funct :: Int -> [a] -> [a]
+funct x xs = take (x+1) xs ++ drop x xs

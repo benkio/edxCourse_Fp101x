@@ -43,4 +43,15 @@ scalarproduct'' xs ys = sum [x * y | (x,y) <- xs `zip` ys]
 scalarproduct''' xs ys = product (zipWith (+) xs ys)
 --scalarproduct'''' xs ys = sum (product [(x,y) | x <- xs, y <- ys])
 
+riffle xs ys = concat [[x, y] | x <- xs, y <- ys]
+riffle' xs ys = concat [[x, y] | (x, y) <- xs `zip` ys]
+--riffle'' xs ys = [ x, y | (x,y) <- xs `zip` ys]
+riffle''' xs ys = [x : [y] | x <- xs, y <- ys]
 
+divides :: Int -> Int -> Bool
+divides x d = x `mod` d == 0
+
+divisors x = [d | d <- [1..x], x `divides` d]
+divisors' x = [d | d <- [1..x], d `divides` x]
+divisors'' x = [d | d <- [2..x], x `divides` d]
+divisors''' x = [d | d <- [1..x], x `divides` d]

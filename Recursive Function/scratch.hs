@@ -80,7 +80,7 @@ myand8 (b: bs)
 myconcat [] = []
 myconcat (xs : xss) = xs : myconcat xss
 
-myconcat2 [] = [[]]
+myconcat2 [] = []
 myconcat2 (xs : xss) = xs ++ myconcat2 xss
 
 myconcat3 [] = [[]]
@@ -128,7 +128,7 @@ item4 (_ : xs) n = item4 xs (n - 1)
 myelem _ [] = False
 myelem x (y : ys)
   | x == y = True
-  | otherwise = myelem x (y : ys)
+  | otherwise = myelem x ys
 
 myelem2 _ [] = False
 myelem2 x (y : ys)
@@ -163,7 +163,7 @@ mymerge3 (x : xs) (y : ys)
 mymerge4 [] ys = ys
 mymerge4 xs [] = xs
 mymerge4 (x : xs) (y : ys)
-  = if x <= y then x : mymerge3 xs (y : ys) else y : mymerge3 (x : xs) ys
+  = if x <= y then x : mymerge4 xs (y : ys) else y : mymerge4 (x : xs) ys
 
 -- msort
 
@@ -171,12 +171,12 @@ halve :: [a] -> ([a], [a])
 halve xs = splitAt (length xs `div` 2) xs
 
 msort [] = []
-msort xs = mymerge (msort zs) (msort ys)
+msort xs = mymerge4 (msort zs) (msort ys)
   where (ys,zs) = halve xs
 
 msort2 [] = []
 msort2 [x] = [x]
-msort2 xs = mymerge (msort2 ys) (msort2 zs)
+msort2 xs = mymerge4 (msort2 ys) (msort2 zs)
   where (ys, zs) = halve xs
 
 msort3 [] = []

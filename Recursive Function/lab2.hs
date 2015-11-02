@@ -9,28 +9,34 @@ module Lab2 where
 -- ===================================
 
 toDigits :: Integer -> [Integer]
-toDigits = undefined
-
+toDigits n
+  | n < 10 && n >= 0 = [n]
+  | n >= 10 = toDigits (toInteger (n `div` 10)) ++ [n `mod` 10]
+  | otherwise = error "negative value"
 -- ===================================
 -- Ex. 1
 -- ===================================
 
 toDigitsRev :: Integer -> [Integer]
-toDigitsRev = undefined
+toDigitsRev n = reverse (toDigits n)
 
 -- ===================================
 -- Ex. 2
 -- ===================================
 
 doubleSecond :: [Integer] -> [Integer]
-doubleSecond = undefined
-
+doubleSecond (x : y : zs) = x : y*2 : doubleSecond zs
+doubleSecond x = x
 -- ===================================
 -- Ex. 3
 -- ===================================
 
 sumDigits :: [Integer] -> Integer
-sumDigits = undefined
+sumDigits [] = 0
+sumDigits (x : xs)
+  | x >= 10 = sumDigits ( toDigits x ++ xs)
+  | x < 0 = error "Negative Value"
+  | otherwise = x + sumDigits xs
 
 
 -- ===================================
@@ -38,7 +44,9 @@ sumDigits = undefined
 -- ===================================
 
 isValid :: Integer -> Bool
-isValid = undefined
+isValid n
+  | n >= 0 = mod (sumDigits (doubleSecond (toDigitsRev n))) 10 == 0
+  | otherwise = error "Negative Number"
 
 
 -- ===================================

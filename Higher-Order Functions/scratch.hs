@@ -64,3 +64,38 @@ myMap2 f = foldr (\x xs -> f x ++ xs) []
 myMap3 f = foldl (\xs x -> f x : xs) []
 myMap4 f = foldl (\xs x -> xs ++ [f x]) []
 
+-- Filter Functions
+
+myFilter p = foldl (\xs x -> if p x then x : xs else xs) []
+myFilter2 p = foldr (\x xs -> if p x then x : xs else xs) []
+myFilter3 p = foldr (\x xs -> if p x then xs ++ [x] else xs) []
+--myFilter4 p = foldl (\x xs -> if p x then xs ++ [x] else xs) []
+
+-- Dec2int Functions
+
+myDec2int = foldr (\x y -> 10 * x + y) 0
+myDec2int2 = foldl (\x y -> x + 10 * y) 0
+myDec2int3 = foldl (\x y -> 10 * x + y) 0
+myDec2int4 = foldr (\x y -> x + 10 * y) 0
+
+-- ex 8
+
+compose :: [a -> a] -> (a -> a)
+compose = foldr (.) id
+
+--sumsqreven = compose [sum,map (^2), filter even]
+
+-- myCurry Functions
+
+myCurry f = \x y -> f x y
+myCurry2 f = \x y -> f
+myCurry3 f = \x y -> f (x,y)
+myCurry4 f = \(x,y) -> f x y
+
+-- uncurry Functions
+
+myUncurry f = \(x,y) -> f x y
+myUncurry2 f = \x y -> f (x,y)
+myUncurry3 f = \(x,y) -> f
+myUncurry4 f = \x y -> f
+ 

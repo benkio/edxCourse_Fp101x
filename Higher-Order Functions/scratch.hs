@@ -99,3 +99,32 @@ myUncurry2 f = \x y -> f (x,y)
 myUncurry3 f = \(x,y) -> f
 myUncurry4 f = \x y -> f
  
+--ex 9
+
+type Bit = Int
+
+unfold p h t x
+ | p x = []
+ | otherwise = h x : unfold p h t (t x)
+
+chop8 :: [Bit] -> [[Bit]]
+chop8 [] = []
+chop8 bits = take 8 bits : chop8 (drop 8 bits)
+
+-- chop8' = unfold [] (drop 8) (take 8)
+chop8'2 = unfold null (take 8) (drop 8)
+chop8'3 = unfold null (drop 8) (take 8)
+chop8'4 = unfold (const False) (take 8) (drop 8)
+
+-- map unfold
+map' f = unfold null (f) tail
+map'2 f = unfold null (f (head)) tail
+map'3 f = unfold null (f . head) tail
+--map'4 f = unfold empty (f . head) tail
+
+-- Iterate Function
+
+iterate' f = unfold (const False) id f
+iterate'2 f = unfold (const False) f f
+iterate'3 f = unfold (const True) id f
+iterate'4 f = unfold (const True) f f

@@ -123,3 +123,48 @@ sequence_'5 (m : ms) = m >>= \_ -> sequence_'5 ms
 sequence_'7 ms = foldr (>>) (return ()) ms
 
 sequence_'8 ms = foldr (>>) (return []) ms
+
+-- es 6
+
+sequence'1 [] = return []
+sequence'1 (m : ms)
+  = m >>=
+      \a ->
+       do as <- sequence'1 ms
+          return (a : as)
+
+{-
+sequence'2 ms = foldr func (return ()) ms
+  where
+        func :: (Monad m) => m a -> m [a] -> m [a]
+        func m acc
+          = do x <- m
+               xs <- acc
+               return (x : xs)
+
+sequence'3 ms = foldr func (return []) ms
+  where
+        func :: (Monad m) => m a -> m [a] -> m [a]
+        func m acc = m : acc
+
+sequence'4 [] = return []
+sequence'4 (m : ms) = return (a : as)
+  where
+      a <- m
+      as <- sequence'4 ms
+-}
+sequence'5 ms = foldr func (return []) ms
+  where
+        func :: (Monad m) => m a -> m [a] -> m [a]
+        func m acc
+          = do x <- m
+               xs <- acc
+               return (x : xs)
+
+{-
+sequence'6 [] = return []
+sequence'6 (m : ms)
+  = m >> \a ->
+          do as <- sequence'6 ms
+             return (a : as)
+-}

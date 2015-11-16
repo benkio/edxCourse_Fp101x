@@ -167,4 +167,106 @@ sequence'6 (m : ms)
   = m >> \a ->
           do as <- sequence'6 ms
              return (a : as)
+
+sequence'7 [] = return []
+sequence'7 (m : ms) = m >> \a ->
+       as <- sequence'7 ms
+       return (a : as)
 -}
+sequence'8 [] = return []
+sequence'8 (m : ms)
+  = do a <- m
+       as <- sequence'8 ms
+       return (a : as)
+
+--Ex 7
+
+mapM'1 f as = sequence'1 (map f as)
+
+mapM'2 f [] = return []
+mapM'2 f (a : as)
+  = f a >>= \b -> mapM'2 f as >>= \bs -> return (b : bs)
+{-
+mapM'3 f as = sequence_'2 (map f as)
+
+mapM'4 f [] = return []
+mapM'4 f (a : as)
+  = f a >> \b -> mapM'4 f as >> \bs -> return (b : bs)
+
+
+mapM'5 f [] = return []
+mapM'5 f (a : as) =
+  do
+     f a -> b
+     mapM'5 f as -> bs
+     return (b : bs)
+-}
+
+mapM'6 f [] = return []
+mapM'6 f (a : as)
+  = do b <- f a
+       bs <- mapM'6 f as
+       return (b : bs)
+
+mapM'7 f [] = return []
+mapM'7 f (a : as)
+  = f a >>=
+      \b ->
+       do bs <- mapM'7 f as
+          return (b : bs)
+
+mapM'8 f [] = return []
+mapM'8 f (a : as)
+  = f a >>=
+      \b ->
+       do bs <- mapM'8 f as
+          return (bs ++ [b])
+
+-- Es 8
+{-
+filterM'1 _ [] = return []
+filterM'1 p (x : xs)
+  = do flag <- p x
+       ys <- filterM'1 p xs
+       return (x : xs)
+-}
+filterM'2 _ [] = return []
+filterM'2 p (x : xs)
+  = do flag <- p x
+       ys <- filterM'2 p xs
+       if flag then return (x : ys) else return ys
+{-
+filterM'3 _ [] = return []
+filterM'3 p (x : xs)
+  = do ys <- filterM'3 p xs
+       if p x then return (x : ys) else return ys
+-}
+filterM'4 _ [] = return []
+filterM'4 p (x : xs)
+ = do flag <- p x
+      ys <- filterM'4 p xs
+      if flag then return ys else return (x : ys)
+
+-- Es 9
+
+foldLeftM :: Monad m => (a -> b -> m a) -> a -> [b] -> m a
+foldLeftM f a [] = return a
+foldLeftM f a (x : xs) = f a x >>= \b -> foldLeftM f b xs
+
+-- Es 10
+foldRightM :: Monad m => (a -> b -> m b) -> b -> [a] -> m b
+foldRightM f b [] = return b
+foldRightM f b (x: xs) = foldRightM f b xs >>= \c -> f x c
+
+-- es 11
+liftM1 f m
+  = do x <- m
+       return (f x)
+
+liftM2 f m = m >>= \a -> f a
+liftM3 f m = m >>= \a -> return (f a)
+liftM4 f m = return (f m)
+liftM5 f m = m  >>= \a -> m >>= \b -> return (f a)
+liftM6 f m = m >>= \a -> m >>= \b -> return (f b)
+liftM7 f m = mapM f [m]
+liftM8 f m = m >> \a -> return (f a)

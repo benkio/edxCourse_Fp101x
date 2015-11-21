@@ -167,3 +167,54 @@ occurs8 m (Node l n r)
   | m < n = occurs8 m r
   | otherwise = occurs8 m l 
 -}
+
+--leaves
+
+data BTree = BLeaf Integer | BNode BTree BTree deriving Show
+
+leaves1 (BLeaf x) = x
+leaves1 (BNode l r) = leaves1 l + leaves1 r
+balanced1 (BLeaf _) = True
+balanced1 (BNode l r)
+  = abs (leaves1 l - leaves1 r) <= 1 || balanced1 l || balanced1 r
+
+{-
+leaves2 (BLeaf _) = True
+leaves2 (BNode l r) = leaves2 l + leaves2 r
+balanced2 (BLeaf _) = True
+balanced2 (BNode l r) = abs (leaves2 l - leaves2 r) <= 1
+
+leaves3 (BLeaf _) = True
+leaves3 (BNode l r) = leaves3 l + leaves3 r
+balanced3 (BLeaf _) = True
+balanced3 (BNode l r) = abs (leaves3 l + leaves3 r) <= 1
+-}
+leaves4 (BLeaf _) = 1
+leaves4 (BNode l r) = leaves4 l + leaves4 r
+balanced4 (BLeaf _) = True
+balanced4  (BNode l r) = abs (leaves4 l - leaves4 r) <= 1 && balanced4 l && balanced4 r
+
+
+-- halves
+halves1 xs = splitAt (length xs `div` 2) xs
+balance1 [x] = BLeaf x
+balance1 xs = BNode (balance1 ys) (balance1 zs)
+  where (ys, zs) = halves1 xs
+
+{-
+halves2 xs = splitAt (length xs / 2) xs
+balance2 [x] = BLeaf x
+balance2 xs = BNode (balance1 ys) (balance1 zs)
+ where (ys,zs) = halves2 xs
+
+halves3 xs = splitAt (length xs `div` 2) xs
+balance3 [x] = BLeaf x
+balance3 xs = BNode ys zs
+  where (ys,zs) = balance3 (halves3 xs)
+
+halves4 xs = splitAt (length xs `div` 2) xs
+balance4 x = BLeaf x
+balance4 xs = BNode (balance1 ys) (balance1 zs)
+  where (ys,zs) = halves4 xs
+-}
+

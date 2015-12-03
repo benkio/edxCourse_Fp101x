@@ -2,17 +2,19 @@
 -- ROSE TREES, FUNCTORS, MONOIDS, FOLDABLES
 ------------------------------------------------------------------------------------------------------------------------------
 
+import Prelude hiding (Monoid, Foldable, mappend,mempty,foldMap)
+
 data Rose a = a :> [Rose a] deriving Show
 
 -- ===================================
 -- Ex. 0-2
 -- ===================================
 
-root :: Rose a -> a 
-root = error "you have to implement root" 
+root :: Rose a -> a
+root  (x :> xs) = x
 
 children :: Rose a -> [Rose a]
-children = error "you have to implement children"
+children (x :> xs) = xs 
 
 xs = 0 :> [1 :> [2 :> [3 :> [4 :> [], 5 :> []]]], 6 :> [], 7 :> [8 :> [9 :> [10 :> []], 11 :> []], 12 :> [13 :> []]]]
 
@@ -23,7 +25,8 @@ ex2 = root . head . children . head . children . head . drop 2 $ children xs
 -- ===================================
 
 size :: Rose a -> Int
-size = error "you have to implement size"
+size (x :> []) = 1
+size (x :> xs)= 1 + foldr (\x y -> size x + y) 0 xs
 
 leaves :: Rose a -> Int
 leaves = error "you have to implement leaves"
